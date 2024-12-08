@@ -13,6 +13,7 @@ import json
 
 from streamlit_javascript import st_javascript
 
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,7 +34,7 @@ def transcribe_with_groq(file_path: str, start_time: int) -> List[Dict]:
     Returns:
         List[Dict]: Lista de diccionarios con la transcripción y timestamps.
     """
-    client = Groq(api_key = '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')
+    client = Groq(api_key = GROQ_API_KEY)
     filename = os.path.basename(file_path)
 
     try:
