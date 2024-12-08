@@ -11,11 +11,11 @@ from langchain_openai import ChatOpenAI
 
 # Configuración de la clave API de Groq
 
-os.environ["OPENAI_API_KEY"] = 'sk-proj-jX7z7YAlDhGAstMn4lk3T3BlbkFJ6ZUTkZp8M84fzFvIZD6E'
-os.environ['GROQ_API_KEY'] = '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'
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+
 
 # Inicializar cliente de Groq
-client = Groq()
+client = Groq(api_key = groq_api_key)
 
 #MODEL = "llama-3.1-70b-Versatile"
 MODEL = "llama-3.3-70b-Versatile"
@@ -36,7 +36,7 @@ def create_edit_chain():
     """
     Configura la cadena de edición utilizando el modelo GPT-4 para edición profesional.
     """
-    llm = ChatGroq(model_name=MODEL, temperature=0)
+    llm = ChatGroq(groq_api_key=GROQ_API_KEY, model_name=MODEL, temperature=0)
     
     template = """
     Eres un editor experto encargado de transformar transcripciones en texto pulido y profesional para un reporte.
