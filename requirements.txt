@@ -1,14 +1,7 @@
 streamlit
-logging
-traceback
-typing
 groq
 pydub
 pandas
-datetime
-streamlit
-base64
-json
 langchain.text_splitter
 langchain.chains
 langchain_groq
