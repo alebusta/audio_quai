@@ -3,3 +3,4 @@ groq
 pydub
 pandas
 langchain
+streamlit-javascript
