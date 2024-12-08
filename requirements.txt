@@ -2,8 +2,4 @@ streamlit
 groq
 pydub
 pandas
-langchain.text_splitter
-langchain.chains
-langchain_groq
-langchain.prompts
-langchain_openai
+langchain
