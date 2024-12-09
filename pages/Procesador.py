@@ -6,7 +6,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import LLMChain
 from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+
 
 
 # Configuración de la clave API de Groq
