@@ -5,3 +5,4 @@ pandas
 langchain
 streamlit-javascript
 ffmpeg-python
+langchain-groq
