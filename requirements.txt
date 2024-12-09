@@ -4,4 +4,4 @@ pydub
 pandas
 langchain
 streamlit-javascript
-ffmpeg
+ffmpeg-python
