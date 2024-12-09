@@ -15,7 +15,7 @@ GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
 
 # Inicializar cliente de Groq
-client = Groq(api_key = groq_api_key)
+client = Groq(api_key = GROQ_API_KEY)
 
 #MODEL = "llama-3.1-70b-Versatile"
 MODEL = "llama-3.3-70b-Versatile"
