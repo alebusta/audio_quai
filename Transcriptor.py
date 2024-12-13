@@ -168,7 +168,7 @@ def main():
                3. Revisa la transcripción y edita si es necesario
                4. Una vez terminada la revisión descarga el archivo corregido
                """)
-    audio_file = st.sidebar.file_uploader("Subir archivo de audio", type=["mp3", "mp4", "wav"])
+    audio_file = st.sidebar.file_uploader("Subir archivo de audio", type=["mp3", "mp4", "wav","m4a"])
 
     if audio_file is not None:
         # Crear directorio temporal si no existe
