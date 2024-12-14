@@ -41,7 +41,7 @@ def transcribe_with_groq(file_path: str, start_time: int) -> List[Dict]:
         with open(file_path, "rb") as file:
             result = client.audio.transcriptions.create(
                 file=(filename, file.read()),
-                model="whisper-large-v3",
+                model="whisper-large-v3-turbo",
                 response_format="verbose_json"
             )
 
