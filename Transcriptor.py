@@ -180,8 +180,7 @@ def main():
 
         # Determinar tamaño del archivo y ajustar el chunk_size
         file_size_mb = os.path.getsize(temp_audio_path) / (1024 * 1024)
-        #file_length = len(AudioSegment.from_file(temp_audio_path)) / (1000*60)
-        chunk_size = 40 * 60000 if file_size_mb > 25 else (30 * 60000 if len(AudioSegment.from_file(temp_audio_path)) > (30 * 60000) else len(AudioSegment.from_file(temp_audio_path)))
+        chunk_size = 10 * 60000 if file_size_mb > 25 else (10 * 60000 if len(AudioSegment.from_file(temp_audio_path)) > (10 * 60000) else len(AudioSegment.from_file(temp_audio_path)))
         #chunk_size = 10 * 60000 if file_length > 10 else len(AudioSegment.from_file(temp_audio_path))
 
         # Transcribir el audio
