@@ -107,7 +107,7 @@ def create_audio_chunks(audio_file: str, chunk_size: int, temp_dir: str) -> List
         counter += 1
     return chunk_files
 
-def transcribe_local_audio(audio_file: str, chunk_size: int = 25*60000, temp_dir: str = "temp_chunks") -> pd.DataFrame:
+def transcribe_local_audio(audio_file: str, chunk_size: int, temp_dir: str = "temp_chunks") -> pd.DataFrame:
     """
     Transcribe un archivo de audio local y retorna un DataFrame con timestamps.
 
