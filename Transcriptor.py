@@ -225,11 +225,10 @@ def main():
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow: visible;
-            padding-top: 40px;
+            overflow: visible;            
         }}
         .audio-container {{
-            position: sticky;
+            position: relative;
             top: 0;
             background-color: white;
             padding: 80px 0;
