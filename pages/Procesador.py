@@ -110,7 +110,7 @@ def obtener_instrucciones(tipo_procesamiento):
 
         # OUTPUT INSTRUCTIONS
 
-        - Output should be in the same language as input (i.e if input is in Spanish output should be in Spanish, including sections names)
+        - Answer in Spanish including section names.
         - Create the output using the formatting above.
         - You only output human readable Markdown.
         - Output numbered lists, not bullets.
