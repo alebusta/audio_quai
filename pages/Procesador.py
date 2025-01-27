@@ -7,11 +7,50 @@ from langchain.chains import LLMChain
 from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
 import time
+from collections import deque
+from datetime import datetime, timedelta
 
 # Configuración de la clave API de Groq
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
 MODEL = "llama-3.3-70b-Versatile"
+
+class TokenRateLimiter:
+    def __init__(self, tokens_per_minute=6000):
+        self.tokens_per_minute = tokens_per_minute
+        self.token_history = deque()
+    
+    def wait_if_needed(self, tokens_needed):
+        """
+        Espera si es necesario para respetar el límite de tokens por minuto.
+        """
+        now = datetime.now()
+        minute_ago = now - timedelta(minutes=1)
+        
+        # Limpiar historial antiguo
+        while self.token_history and self.token_history[0][0] < minute_ago:
+            self.token_history.popleft()
+        
+        # Calcular tokens usados en el último minuto
+        tokens_used = sum(tokens for _, tokens in self.token_history)
+        
+        if tokens_used + tokens_needed > self.tokens_per_minute:
+            # Calcular tiempo de espera necesario
+            oldest_time = self.token_history[0][0] if self.token_history else now
+            wait_seconds = (oldest_time + timedelta(minutes=1) - now).total_seconds()
+            if wait_seconds > 0:
+                time.sleep(wait_seconds)
+                self.token_history.clear()
+        
+        # Registrar nuevo uso de tokens
+        self.token_history.append((now, tokens_needed))
+
+def estimate_tokens(text):
+    """
+    Estima el número de tokens en un texto.
+    Usa una aproximación conservadora de 4 caracteres por token.
+    """
+    return len(text) // 4
 
 def obtener_instrucciones(tipo_procesamiento):
     """
@@ -115,22 +154,25 @@ def obtener_instrucciones(tipo_procesamiento):
     }
     return instrucciones.get(tipo_procesamiento, "")
 
-def create_chunks(text, max_chunk_size=3000, overlap=200):
+def create_chunks(text, max_tokens=2000, overlap_tokens=100):
     """
-    Divide el texto en fragmentos más pequeños con superposición.
+    Divide el texto en fragmentos respetando el límite de tokens.
     """
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=max_chunk_size,
-        chunk_overlap=overlap,
+        chunk_size=max_tokens * 4,  # Convertir tokens a caracteres aproximados
+        chunk_overlap=overlap_tokens * 4,
         length_function=len,
         separators=["\n\n", "\n", ". ", " ", ""]
     )
     return splitter.split_text(text)
 
-def process_with_retry(prompt, max_retries=3, delay=2):
+def process_with_rate_limit(prompt, rate_limiter, max_retries=3):
     """
-    Procesa un prompt con reintentos en caso de error.
+    Procesa un prompt respetando el rate limit.
     """
+    estimated_tokens = estimate_tokens(prompt)
+    rate_limiter.wait_if_needed(estimated_tokens)
+    
     for attempt in range(max_retries):
         try:
             completion = client.chat.completions.create(
@@ -145,58 +187,81 @@ def process_with_retry(prompt, max_retries=3, delay=2):
             )
             return completion.choices[0].message.content
         except Exception as e:
-            if attempt == max_retries - 1:
-                raise e
-            time.sleep(delay * (attempt + 1))  # Backoff exponencial
-            continue
+            if "rate_limit_exceeded" in str(e):
+                if attempt < max_retries - 1:
+                    time.sleep(5 * (attempt + 1))  # Backoff exponencial
+                    continue
+            raise e
+
+def summarize_long_text(text, tipo_procesamiento, rate_limiter):
+    """
+    Resume textos largos en múltiples pasos si es necesario.
+    """
+    chunks = create_chunks(text, max_tokens=3000)
+    summaries = []
+    
+    for chunk in chunks:
+        prompt = f"""
+        Resume este fragmento manteniendo los puntos más importantes:
+
+        {chunk}
+        """
+        summary = process_with_rate_limit(prompt, rate_limiter)
+        summaries.append(summary)
+    
+    # Combinar resúmenes en un resultado final
+    combined_summary = "\n\n".join(summaries)
+    final_prompt = f"""
+    Genera el resultado final siguiendo el formato original:
+
+    {obtener_instrucciones(tipo_procesamiento)}
+
+    Basado en:
+    {combined_summary}
+    """
+    
+    return process_with_rate_limit(final_prompt, rate_limiter)
 
 def process_chunks(chunks, tipo_procesamiento, progress_bar=None):
     """
-    Procesa múltiples fragmentos y los combina de manera inteligente.
+    Procesa múltiples fragmentos respetando el rate limit.
     """
+    rate_limiter = TokenRateLimiter()
     results = []
     total_chunks = len(chunks)
     
     for i, chunk in enumerate(chunks):
         instrucciones = obtener_instrucciones(tipo_procesamiento)
+        # Reducir el tamaño del prompt para el procesamiento individual
         prompt = f"""
-        Procesa el siguiente fragmento de texto según las instrucciones.
-        Si este es un fragmento intermedio, asegúrate de mantener la continuidad con el contexto.
+        Procesa este fragmento según las instrucciones. Mantén la continuidad si es un fragmento intermedio.
 
-        Instrucciones específicas:
-        {instrucciones}
+        Instrucciones: {instrucciones}
 
-        Texto a procesar (fragmento {i+1} de {total_chunks}):
+        Texto (parte {i+1}/{total_chunks}):
         {chunk}
-
-        Resultado:
         """
         
         try:
-            result = process_with_retry(prompt)
+            result = process_with_rate_limit(prompt, rate_limiter)
             results.append(result)
             if progress_bar:
                 progress_bar.progress((i + 1) / total_chunks)
         except Exception as e:
             st.error(f"Error en fragmento {i+1}: {str(e)}")
+            time.sleep(5)  # Esperar antes de continuar
             continue
 
-    # Combinar resultados de manera inteligente según el tipo de procesamiento
-    if tipo_procesamiento == "Edición Profesional":
-        return "\n\n".join(results)
-    elif tipo_procesamiento in ["Resumen", "Minuta", "Oportunidades"]:
-        # Procesar un resumen final de todos los resúmenes parciales
-        combined_text = "\n\n".join(results)
-        final_prompt = f"""
-        Combina los siguientes resultados parciales en un único documento coherente siguiendo las instrucciones originales:
-
-        {combined_text}
-
-        Resultado final:
-        """
-        return process_with_retry(final_prompt)
-    else:
-        return "\n\n".join(results)
+    # Combinar resultados según el tipo de procesamiento
+    combined_text = "\n\n".join(results)
+    
+    # Para tipos que necesitan un procesamiento final
+    if tipo_procesamiento in ["Resumen", "Minuta", "Oportunidades"]:
+        # Dividir el texto combinado si es necesario
+        if estimate_tokens(combined_text) > 4000:
+            combined_text = summarize_long_text(combined_text, tipo_procesamiento, rate_limiter)
+    
+    return combined_text
 
 def procesar_transcripcion(text, tipo_procesamiento):
     """
@@ -226,7 +291,7 @@ def procesar_transcripcion(text, tipo_procesamiento):
         progress_bar.empty()
         status_text.empty()
         return None
-
+        
 def main():
     st.title("📝 Procesador Avanzado de Transcripciones")
     st.write("El procesador permite generar un resumen editado de la transcripción, minutas y resúmenes personalizados")
