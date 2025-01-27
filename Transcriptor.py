@@ -234,6 +234,8 @@ def main():
             padding: 10px 0;
             z-index: 1000;
             border-bottom: 1px solid #ddd;
+            min-height: 54px;
+            width:100%;
         }}
         .content-container {{
             flex: 1;
