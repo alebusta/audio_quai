@@ -231,7 +231,7 @@ def main():
             position: sticky;
             top: 0;
             background-color: white;
-            padding: 20px 0;
+            padding: 50px 0;
             z-index: 1000;
             border-bottom: 1px solid #ddd;
             min-height: 100px;
