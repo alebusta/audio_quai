@@ -100,7 +100,7 @@ def obtener_instrucciones(tipo_procesamiento):
         Toma un respiro profundo y piensa paso a paso cómo lograr mejor este objetivo siguiendo los siguientes pasos.
 
         Secciones de salida:
-        - Combina todo tu entendimiento del contenido en una sola oración de 20 palabras en una sección llamada RESUMEN EN UNA ORACIÓN:.
+        - Combina todo tu entendimiento del contenido en dos oraciones de 20 palabras en una sección llamada RESUMEN:.
         - Extrae los 10 puntos más importantes del contenido como una lista con no más de 15 palabras por punto en una sección llamada PUNTOS PRINCIPALES:.
         - Genera una lista de las 5 mejores conclusiones del contenido en una sección llamada CONCLUSIONES CLAVE:.
 
@@ -251,7 +251,7 @@ def procesar_transcripcion(text, tipo_procesamiento):
 
     # Si estimamos que el texto es muy largo, resumimos primero
     if estimated_tokens > 3000:
-        st.warning("Se realizará un resumen inicial de la transcripción para procesar tu solicitud.")
+        #st.warning("Se realizará un resumen inicial de la transcripción para procesar tu solicitud.")
         text = resumir_texto(text)
 
     instrucciones = obtener_instrucciones(tipo_procesamiento)
