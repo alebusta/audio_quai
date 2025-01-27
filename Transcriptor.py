@@ -234,10 +234,10 @@ def main():
             padding: 20px;
             z-index: 1000;
             border-bottom: 1px solid #ddd;
-            min-height: 100px;
+            min-height: 200px;
             width:100%;
             overflow: visible;
-            margin-top: 100px
+            margin-top: 150px
         }}
         .content-container {{
             flex: 1;
