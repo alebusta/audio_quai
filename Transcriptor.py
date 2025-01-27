@@ -226,6 +226,7 @@ def main():
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            padding-top: 10px;
         }}
         .audio-container {{
             position: sticky;
