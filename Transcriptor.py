@@ -232,9 +232,9 @@ def main():
             top: 0;
             background-color: white;
             padding: 20px;
-            z-index: 1000;
+            z-index: 2000;
             border-bottom: 1px solid #ddd;
-            min-height: 250px;
+            min-height: 80px;
             width:100%;
             overflow: visible;
             margin-top: 20px
