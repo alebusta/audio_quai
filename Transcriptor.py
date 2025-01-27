@@ -158,7 +158,7 @@ def transcribe_local_audio(audio_file: str, chunk_size: int, temp_dir: str = "te
     return df
 
 def main(): 
-    st.sidebar.title("Transcripción de Audio a Texto")
+    st.title("Transcripción de Audio a Texto")
     st.sidebar.write("Utiliza esta sección para cargar un archivo de audio y transcribirlo (máximo una hora de audio).")
     #st.set_option('server.maxUploadSize', 300)  # Aumentar a 1000 MB (1 GB)
     st.sidebar.write(""" 
