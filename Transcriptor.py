@@ -293,7 +293,7 @@ def main():
         }}
         /* Asegura que el menú desplegable tenga un z-index alto */
         audio::-webkit-media-controls-panel {{
-            z-index: 1001;  /* Asegura que el menú esté por encima de otros elementos */
+            z-index: 2001;  /* Asegura que el menú esté por encima de otros elementos */
         }}
         </style>
         <div class="container">
