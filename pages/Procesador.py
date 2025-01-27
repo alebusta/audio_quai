@@ -9,7 +9,8 @@ from datetime import datetime, timedelta
 # Configuración de la clave API de Groq
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
-MODEL = "llama-3-70b-8192"
+MODEL = "llama-3.3-70b-Versatile"
+
 
 class TokenRateLimiter:
     def __init__(self, tokens_per_minute=6000):
