@@ -237,7 +237,7 @@ def main():
             min-height: 80px;
             width:100%;
             overflow: visible;
-            margin-top: 20px
+            margin-top: 40px
         }}
         .content-container {{
             flex: 1;
@@ -293,7 +293,7 @@ def main():
         }}
         /* Asegura que el menú desplegable tenga un z-index alto */
         audio::-webkit-media-controls-panel {{
-            z-index: 2001;  /* Asegura que el menú esté por encima de otros elementos */
+            z-index: 2002;  /* Asegura que el menú esté por encima de otros elementos */
         }}
         </style>
         <div class="container">
