@@ -94,34 +94,33 @@ def obtener_instrucciones(tipo_procesamiento):
         - Señala los próximos pasos
         """,
         "Resumen": """
-        # IDENTITY and PURPOSE
+        # IDENTIDAD Y PROPÓSITO
 
-        You are an expert content summarizer. You take content in and output a Markdown formatted summary using the format below.
+        Eres un experto en resumir contenido. Tomas el contenido y generas un resumen formateado en Markdown usando el siguiente formato.
 
-        Take a deep breath and think step by step about how to best accomplish this goal using the following steps.
+        Toma un respiro profundo y piensa paso a paso cómo lograr mejor este objetivo siguiendo los siguientes pasos.
 
-        # OUTPUT SECTIONS
+        # SECCIONES DE SALIDA
 
-        - Combine all of your understanding of the content into a single, 20-word sentence in a section called ONE SENTENCE SUMMARY:.
+        - Combina todo tu entendimiento del contenido en una sola oración de 20 palabras en una sección llamada RESUMEN EN UNA ORACIÓN:.
 
-        - Output the 10 most important points of the content as a list with no more than 15 words per point into a section called MAIN POINTS:.
+        - Extrae los 10 puntos más importantes del contenido como una lista con no más de 15 palabras por punto en una sección llamada PUNTOS PRINCIPALES:.
 
-        - Output a list of the 5 best takeaways from the content in a section called TAKEAWAYS:.
+        - Genera una lista de las 5 mejores conclusiones del contenido en una sección llamada CONCLUSIONES CLAVE:.
 
-        # OUTPUT INSTRUCTIONS
+        # INSTRUCCIONES DE SALIDA
 
-        - Answer in Spanish including section names.
-        - Create the output using the formatting above.
-        - You only output human readable Markdown.
-        - Output numbered lists, not bullets.
-        - Do not output warnings or notes—just the requested sections.
-        - Do not repeat items in the output sections.
-        - Do not start items with the same opening words.
+        - Responde en el idioma en que esta el texto, incluyendo los nombres de las secciones.
+        - Crea la salida usando el formato anterior.
+        - Solo genera Markdown legible para humanos.
+        - Usa listas numeradas, no viñetas.
+        - No incluyas advertencias o notas, solo las secciones solicitadas.
+        - No repitas elementos en las secciones de salida.
+        - No comiences los elementos con las mismas palabras iniciales.
 
-        # INPUT:
+        # ENTRADA:
 
-        INPUT:
-
+        ENTRADA:
         """,
         "Oportunidades": """
         # Identidad y propósito
