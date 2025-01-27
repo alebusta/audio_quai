@@ -231,12 +231,13 @@ def main():
             position: relative;
             top: 0;
             background-color: white;
-            padding: 80px 0;
+            padding: 20px;
             z-index: 1000;
             border-bottom: 1px solid #ddd;
             min-height: 100px;
             width:100%;
             overflow: visible;
+            margin-top: 20px
         }}
         .content-container {{
             flex: 1;
