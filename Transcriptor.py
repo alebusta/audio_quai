@@ -225,7 +225,7 @@ def main():
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow: hidden;
+            overflow: visible;
             padding-top: 40px;
         }}
         .audio-container {{
@@ -237,6 +237,7 @@ def main():
             border-bottom: 1px solid #ddd;
             min-height: 100px;
             width:100%;
+            overflow: visible;
         }}
         .content-container {{
             flex: 1;
