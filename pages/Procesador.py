@@ -58,6 +58,8 @@ def create_edit_chain():
     10. Si hay algún acrónimo o nombre propio del que tengas dudas señálalo entre paréntesis.
     11. Si hay intervenciones en idiomas distintos al español tradúcelas a español.
 
+    Genera la edición sin ningún comentario adicional.
+
     Transcripción:
     {text}
     
@@ -117,6 +119,7 @@ def obtener_instrucciones(tipo_procesamiento):
         - No incluyas advertencias o notas, solo las secciones solicitadas.
         - No repitas elementos en las secciones de salida.
         - No comiences los elementos con las mismas palabras iniciales.
+        - Entrega lo indicado en las instrucciones sin ningún tipo de comentario adicional.
 
         # ENTRADA:
 
