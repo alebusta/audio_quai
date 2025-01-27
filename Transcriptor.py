@@ -382,7 +382,7 @@ def main():
         """
 
         # Mostrar el componente HTML
-        st.components.v1.html(html_content, height=400, scrolling=False)
+        st.components.v1.html(html_content, height=500, scrolling=False)
 
         # Limpiar archivos temporales
         if os.path.exists(temp_audio_path):
