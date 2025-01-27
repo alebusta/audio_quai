@@ -234,7 +234,7 @@ def main():
             padding: 20px 0;
             z-index: 1000;
             border-bottom: 1px solid #ddd;
-            min-height: 80px;
+            min-height: 100px;
             width:100%;
         }}
         .content-container {{
