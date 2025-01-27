@@ -237,7 +237,7 @@ def main():
             min-height: 80px;
             width:100%;
             overflow: visible;
-            margin-top: 600px
+            margin-top: 60px
         }}
         .content-container {{
             flex: 1;
