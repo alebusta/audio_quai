@@ -14,8 +14,8 @@ GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key = GROQ_API_KEY)
 
 #MODEL = "llama-3.1-70b-Versatile"
-MODEL = "llama-3.3-70b-Versatile"
-#MODEL = "Mixtral-8x7b-32768"
+#MODEL = "llama-3.3-70b-Versatile"
+MODEL = "Mixtral-8x7b-32768"
 
 # Ajustar el tamaño máximo de tokens para evitar llegar al límite de la API
 MAX_TOKENS = 3000
