@@ -251,8 +251,7 @@ def procesar_transcripcion(text, tipo_procesamiento):
 
     # Si estimamos que el texto es muy largo, resumimos primero
     if estimated_tokens > 3000:
-        #st.warning("Se realizará un resumen inicial de la transcripción para procesar tu solicitud.")
-        text = resumir_texto(text)
+       text = resumir_texto(text)
 
     instrucciones = obtener_instrucciones(tipo_procesamiento)
 
