@@ -96,34 +96,25 @@ def obtener_instrucciones(tipo_procesamiento):
         - Señala los próximos pasos
         """,
         "Resumen": """
-        # IDENTIDAD Y PROPÓSITO
-
         Eres un experto en resumir contenido. Tomas el contenido y generas un resumen formateado en Markdown usando el siguiente formato.
-
         Toma un respiro profundo y piensa paso a paso cómo lograr mejor este objetivo siguiendo los siguientes pasos.
 
-        # SECCIONES DE SALIDA
-
+        Secciones de salida:
         - Combina todo tu entendimiento del contenido en una sola oración de 20 palabras en una sección llamada RESUMEN EN UNA ORACIÓN:.
-
         - Extrae los 10 puntos más importantes del contenido como una lista con no más de 15 palabras por punto en una sección llamada PUNTOS PRINCIPALES:.
-
         - Genera una lista de las 5 mejores conclusiones del contenido en una sección llamada CONCLUSIONES CLAVE:.
 
         # INSTRUCCIONES DE SALIDA
 
         - Responde en el idioma en que esta el texto, incluyendo los nombres de las secciones.
-        - Crea la salida usando el formato anterior.
+        - Crea la salida usando las instrucciones indicadasa.
         - Solo genera Markdown legible para humanos.
         - Usa listas numeradas, no viñetas.
         - No incluyas advertencias o notas, solo las secciones solicitadas.
-        - No repitas elementos en las secciones de salida.
+        - Importante no repetir elementos en las secciones de salida.
         - No comiences los elementos con las mismas palabras iniciales.
         - Entrega lo indicado en las instrucciones sin ningún tipo de comentario adicional.
 
-        # ENTRADA:
-
-        ENTRADA:
         """,
         "Oportunidades": """
         # Identidad y propósito
