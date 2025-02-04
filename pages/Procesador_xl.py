@@ -83,8 +83,8 @@ def procesar_transcripcion(text, tipo_procesamiento):
 
 
 def main():
-    st.title("\U0001F4DD Procesador Avanzado de Transcripciones")
-    st.write("El procesador permite generar un resumen editado de la transcripción, minutas y resúmenes personalizados")
+    st.title("\U0001F4DD Procesador Avanzado de Transcripciones para textos grandes")
+    st.write("El procesador permite generar minutas y resúmenes personalizados")
     st.sidebar.write("""
                 Pasos:
                 1. Carga un archivo csv o pega un texto
