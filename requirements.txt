@@ -6,3 +6,4 @@ langchain
 streamlit-javascript
 ffmpeg-python
 langchain-groq
+google-generativeai
