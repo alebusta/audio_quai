@@ -24,13 +24,14 @@ def format_timestamp(milliseconds: int) -> str:
     seconds = int(milliseconds / 1000)
     return str(timedelta(seconds=seconds))
 
-def transcribe_with_groq(file_path: str, start_time: int) -> List[Dict]:
+def transcribe_with_groq(file_path: str, start_time: int, context: str) -> List[Dict]:
     """
     Transcribe un archivo de audio usando el servicio de transcripción de Groq.
 
     Args:
         file_path (str): Ruta al archivo de audio que necesita ser transcrito.
         start_time (int): Tiempo de inicio del segmento en milisegundos.
+        context (str): Contexto proporcionado por el usuario para la transcripción.
     Returns:
         List[Dict]: Lista de diccionarios con la transcripción y timestamps.
     """
@@ -42,8 +43,10 @@ def transcribe_with_groq(file_path: str, start_time: int) -> List[Dict]:
             result = client.audio.transcriptions.create(
                 file=(filename, file.read()),
                 model="whisper-large-v3-turbo",
-                response_format="verbose_json"
-            )
+                prompt=context,
+                response_format="verbose_json",
+                language='es'
+            )   
 
         segments = []
         for segment in result.segments:
@@ -107,13 +110,14 @@ def create_audio_chunks(audio_file: str, chunk_size: int, temp_dir: str) -> List
         counter += 1
     return chunk_files
 
-def transcribe_local_audio(audio_file: str, chunk_size: int, temp_dir: str = "temp_chunks") -> pd.DataFrame:
+def transcribe_local_audio(audio_file: str, chunk_size: int, context: str, temp_dir: str = "temp_chunks") -> pd.DataFrame:
     """
     Transcribe un archivo de audio local y retorna un DataFrame con timestamps.
 
     Args:
         audio_file (str): Ruta al archivo de audio local (MP3 o MP4).
         chunk_size (int): Duración de cada segmento en milisegundos (por defecto 25 minutos).
+        context (str): Contexto proporcionado por el usuario para la transcripción.
         temp_dir (str): Directorio para almacenar los segmentos temporales.
     Returns:
         pd.DataFrame: DataFrame con columnas start_time, end_time y text.
@@ -130,7 +134,8 @@ def transcribe_local_audio(audio_file: str, chunk_size: int, temp_dir: str = "te
                 logging.info(f"Transcribiendo {chunk_info['file_path']}")
                 transcript_data = transcribe_with_groq(
                     chunk_info['file_path'],
-                    chunk_info['start_time']
+                    chunk_info['start_time'],
+                    context
                 )
                 transcripts.extend(transcript_data)
             except Exception as e:
@@ -160,17 +165,26 @@ def transcribe_local_audio(audio_file: str, chunk_size: int, temp_dir: str = "te
 def main(): 
     st.title("Transcripción de Audio a Texto")
     st.sidebar.write("Utiliza esta sección para cargar un archivo de audio y transcribirlo (máximo una hora de audio).")
-    #st.set_option('server.maxUploadSize', 500)  # Aumentar a 1000 MB (1 GB)
+    
     st.sidebar.write(""" 
                Pasos:
                1. Sube un archivo de audio
-               2. La aplicación iniciará la transcripción (puede durar varios minutos)
-               3. Revisa la transcripción y edita si es necesario
-               4. Una vez terminada la revisión descarga el archivo corregido
+               2. Proporciona el contexto de la transcripción
+               3. La aplicación iniciará la transcripción (puede durar varios minutos)
+               4. Revisa la transcripción y edita si es necesario
+               5. Una vez terminada la revisión descarga el archivo corregido
                """)
+    
+    # Campo de texto para el contexto
+    context = st.sidebar.text_area(
+        "Contexto de la transcripción",
+        "Proporciona información sobre el contexto del audio (ej: tipo de reunión, participantes, temas principales)",
+        help="Este contexto ayudará a mejorar la precisión de la transcripción"
+    )
+    
     audio_file = st.sidebar.file_uploader("Subir archivo de audio", type=["mp3", "mp4", "wav","m4a"])
 
-    if audio_file is not None:
+    if audio_file is not None and context:
         # Crear directorio temporal si no existe
         os.makedirs("temp_dir", exist_ok=True)
         # Guardar archivo subido temporalmente
@@ -180,11 +194,10 @@ def main():
 
         # Determinar tamaño del archivo y ajustar el chunk_size
         file_size_mb = os.path.getsize(temp_audio_path) / (1024 * 1024)
-        chunk_size = 25 * 60000 if file_size_mb > 25 else len(AudioSegment.from_file(temp_audio_path)) 
-        
+        chunk_size = 25 * 60000 if file_size_mb > 25 else len(AudioSegment.from_file(temp_audio_path))
 
         # Transcribir el audio
-        df_transcription = transcribe_local_audio(temp_audio_path, chunk_size=chunk_size)
+        df_transcription = transcribe_local_audio(temp_audio_path, chunk_size=chunk_size, context=context)
 
         # Preparar los datos de transcripción
         df_transcription['start_seconds'] = df_transcription['start'] / 1000
